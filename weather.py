@@ -94,7 +94,7 @@ Forecast: {period['detailedForecast']}
 
 def main():
     # Initialize and run the server
-    mcp.run(transport='stdio')
+    mcp.run(transport="http", host="https://mcptest-tprg.onrender.com", port=8000)
 
 if __name__ == "__main__":
     main()
