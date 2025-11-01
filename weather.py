@@ -2,6 +2,8 @@ from typing import Any
 import httpx
 from mcp.server.fastmcp import FastMCP
 
+from fastapi import FastAPI, Request
+
 # Initialize FastMCP server
 mcp = FastMCP("weather")
 
@@ -91,10 +93,13 @@ Forecast: {period['detailedForecast']}
 
     return "\n---\n".join(forecasts)
 
+app = FastAPI()
 
-def main():
-    # Initialize and run the server
-    mcp.run(transport="http", host="https://mcptest-tprg.onrender.com", port=8000)
+@app.post("/mcp")
+async def handle_mcp(request: Request):
+    return await mcp.handle_http(request)
 
-if __name__ == "__main__":
-    main()
+# Optional: a simple health check
+@app.get("/")
+def root():
+    return {"status": "ok", "mcp": "weather"}
